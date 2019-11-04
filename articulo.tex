@@ -39,7 +39,7 @@
 \pagestyle{fancy} 
 \fancyhead{} 
 \fancyfoot{} 
-\fancyhead[C]{Inmon vs Kimball $\bullet$ Octubre 2019 $\bullet$ } 
+\fancyhead[C]{Modelo Dimensional vs Modelo Tabular$\bullet$ Octubre 2019 $\bullet$ } 
 \fancyfoot[RO,LE]{\thepage} 
 
 
@@ -58,8 +58,8 @@
 
 \pretitle{\begin{center}\Huge\bfseries} 
 \posttitle{\end{center}} 
-\title{Inmon vs Kimball} 
-\author{Marko Antonio Rivas Rios\\  Jorge Luis Mamani Maquera
+\title{Modelo Dimensional vs Modelo Tabular} 
+\author{Marko Antonio Rivas Rios\\  Jorge Luis Mamani Maquera\\ Edward Apaza Mamani
 }
 \date{\today} 
 \renewcommand{\maketitlehookd}{
@@ -70,12 +70,7 @@
 Resumen
 \end{center}
 \textbf{}\\
-Este artículo define el almacenamiento de datos y sus conceptos básicos y describe el
-punto de vista metodológico entre dos influyentes expertos en almacenamiento de datos Bill Inmon
-y Ralph Kimball al proporcionar los mismos atributos, contradicciones, factores influyentes
-favoreciendo el enfoque de Inmon y Kimball con un par de proyectos ejecutados en tiempo real
-siguiendo algunas de las pautas para determinar el mejor enfoque basado en la referencia
-documentos.
+El aumento de la cantidad de datos acumulados en las organizaciones ha provocado la aparición de nuevos requisitos de herramientas de análisis más complejas y eficientes, contexto en el cual la Business Intelligence surge como una disciplina para abordar este problema. La mejora de la eficiencia en el almacenamiento y el acceso a bases de datos analíticas ha sido reportada en muchas investigaciones, sobre las cuales varias compañías han introducido productos comerciales. Microsoft SQL Server 2017 ofrece dos alternativas independientes para crear modelos analíticos, el modelo multidimensional clásico y el modelo tabular más reciente. En este documento se realizó un análisis comparativo de ambos modelos, analizando profundamente sus características y potencialidades. 
 \textbf{}\\
 
 \noindent 
@@ -83,13 +78,7 @@ documentos.
 Abstract 
 \end{center}
 \textbf{}\\
-This article defines Data warehousing and its basic concepts and describes the
-methodological standpoint between two influential data warehousing experts Bill Inmon
-and Ralph Kimball by providing the identical attributes, contradictions, influential factors
-favoring Inmon and Kimball approach with a couple of real-time executed projects
-following some of the guidelines to determine the best approach based on the referenced
-papers.
-
+The increase in the amount of data accumulated in organizations has led to the emergence of new requirements for more complex and efficient analysis tools, a context in which business intelligence emerges as a discipline to address this problem. The improvement of storage efficiency and access to analytical databases has been reported in many investigations, on which several companies have used commercial products. Microsoft SQL Server 2017 offers two independent alternatives to create analytical models, the classic multidimensional model and the most recent tabular model. In this document a comparative analysis of both models was carried out, deeply analyzing their characteristics and potentialities.
 }
 
 %----------------------------------------------------------------------------------------
@@ -104,28 +93,17 @@ papers.
 %----------------------------------------------------------------------------------------
 
 \section{Introduccion}
-\lettrine[nindent=0em,lines=3]{A}Estamos viviendo en la era de una revolución de datos, y más corporaciones se están dando cuenta de que para liderar, o en algunos casos, para sobrevivir, necesitan aprovechar su riqueza de datos de manera efectiva.
-El almacén de datos, debido a su propuesta única como el repositorio empresarial integrado de datos, está jugando un papel aún más importante en esta situación. Actualmente se practican dos estilos de arquitectura prominentes para construir un almacén de datos: la arquitectura Inmon y la arquitectura Kimball.
-Este artículo intenta comparar y contrastar los pros y los contras de cada estilo de arquitectura y recomendar qué estilo seguir basándose en ciertos factores.\textbf{}\\
+\lettrine[nindent=0em,lines=3]{A} la hora de definir nuestro modelo SSAS debemos analizar concienzudamente los diversos usos e implementaciones del que va a ser objeto el producto final, ya que aunque ambos tipos de elementos se creen en la herramienta de SSAS hay diferencias sustanciales, no que hagan que uno sea mejor y el otro peor si no que van encaminados a diferentes propósitos.
+
+Una de la primeras y más importantes diferencias es que el motor de almacenamiento de los modelos tabulares es en memoria y persiste en disco, lo que garantiza su recuperación tras un reinicio.
+
+Además su arquitectura permite que se generen modelos rápidamente ya que su implementación es sencilla y permite performance de rendimiento.
+
+Los modelos tabulares están basados en columnas y no existe el concepto de agregaciones, lo que quiere decir, que cuando se realicen consultas sobre el mismo el motor de consulta solo trabajará con las columnas que figuren en la consulta.\textbf{}\\
+Por último, en tabular no existe el concepto de “agregaciones” que existe en los cubos multidimensionales. El almacenamiento en los modelos tabulares está basado en columnas, esto es, que cuando se realiza una consulta MDX, el motor de consulta solo trabajará sobre las columnas especificadas en la consulta.
 \textbf{}\\
-\textbf{}\\
-\textbf{}\\
-\textbf{Definición de Inmon: }\\
-"Un almacén de datos es una variante de tiempo orientada a temas, integrada y
-recopilación no volátil de datos en apoyo del proceso de toma de decisiones de la administración ".
-\textbf{}\\
-\textbf{Almacén de datos de Inmon: }\\
-un repositorio centralizado de una empresa que abarca todas las líneas
-de negocios y áreas temáticas que contienen datos integrados de fuentes dispares.
-(Inmon 2005)
-\textbf{}\\
-\textbf{}\\
-\textbf{Definición de Kimball:}\\
- "Un almacén de datos es una copia de los datos de la transacción específicamente
-estructurado para consulta y análisis ". (Kimball y Ross 2002)\textbf{}\\
-\textbf{Data Mart de Kimball: }\\
-un tema específico orientado o perteneciente a una línea de negocio individual
-que se construyen utilizando modelado dimensional. (Abramson 2004)
+Por otro lado tienen limitaciones,como que es no se permite más de una relación entre dos tablas, no se permiten relaciones muchos a muchos entre dos tablas o que para extraer datos del origen es necesario realizarlo mediante una única consulta por cada tabla del modelo.
+
 
 
 
@@ -139,12 +117,9 @@ que se construyen utilizando modelado dimensional. (Abramson 2004)
 \begin{itemize}
 \item 
 
-\textbf{Inmon y Kimball}
+\textbf{Modelo Dimensional vs Modelo Tabular}
 \\
-\item Comprender las Versiones de Bill Inmon y Ralph Kimball
-
-\item Comprender los pasos de Bill Inmon y Ralph Kimball
-\\
+\item Comprender las los modelos de forma dimensional y tabularl
 
 
 
@@ -158,59 +133,105 @@ que se construyen utilizando modelado dimensional. (Abramson 2004)
 
 \section{Marco teorico}
 \begin{enumerate}
-\item \textbf{Metodología Inmon}:
-Bill Inmon define el almacén de datos como un repositorio centralizado y aboga por un top-down
-enfoque de desarrollo que adapta las herramientas de bases de datos relacionales (Extract Transform Load - ETL)
-a las necesidades de desarrollo de un almacén de datos de toda la empresa que extrae datos de
-varias fuentes y almacenes en datos 'atómicos' con el nivel más bajo de detalle que pasa a través de
-área de preparación o aterrizaje. Los marts de datos se crean solo después de que el almacén de datos completo tiene
-ha sido creado Por lo tanto, el almacén de datos está en el centro de la Fábrica de información corporativa (CIF),
-que proporciona un marco lógico para entregar inteligencia de negocios. (Breslin 2004)\\
-\includegraphics[width=6.5cm]{Imagenes/inmom1}
-\\
+\item \textbf{Modelo Dimensional }:\\
+El modelo de datos dimensional, como ya se comentó en artículos anteriores, conlleva una técnica de modelado que facilita la compresión de la base de datos, haciéndola intuitiva para usuarios no expertos, y es comúnmente utilizada para implementar los DWH o DM.
+Esta técnica goza de una gran aceptación y, a menudo, es elegida como la preferida para representar datos analíticos por cumplir simultáneamente con los siguientes requerimientos:\textbf{}\\
+\textbf{}\\
+- Dispone y estructura los datos de manera comprensibles para el usuario de negocio 
+\textbf{}\\
+- Genera un alto rendimiento en las búsquedas desde la capa de reporting
+Dentro del modelado de datos dimensional destacan 2 conceptos clave: hechos y dimensiones.\textbf{}\\
+\textbf{}\\
+- Hechos: Son las métricas, normalmente valores cuantitativos (numéricos) susceptibles de ser agregados\textbf{}\\
+\textbf{Ejemplo: }\\La cantidad de ventas de coches de un concesionario, el rendimiento en euros de una empresa, el número de estudiantes de un colegio, etc.\textbf{}\\
+\textbf{}\\
+- Dimensiones: Son los valores cualitativos. Proporcionan descripciones a los hechos, aportando un contexto a los mismos.\textbf{}\\
+\textbf{Ejemplo: }\\Marca de coche, fecha, nombre concesionario, dirección de la empresa, nombre del colegio, etc.\textbf{}\\
+\textbf{}\\
+Existen 2 técnicas para llevar acabo el modelado dimensional: el esquema de estrella y el esquema de copo de nieve.
+\textbf{}\\
+\textbf{}\\
+\textbf{Esquema de estrella}\\
+Un esquema de estrella es un modelo de datos formado por una tabla de hechos, que contiene los datos para el análisis, rodeada de las tablas de dimensiones.
 
-Inmon divide el entorno general de la base de datos de la organización en cuatro niveles:
-\\
-1. Operacional
-\\
-2. Almacén de datos atómicos
-\\
-3. Departamental
-\\
-4. Individual
-
-Los últimos tres niveles comprenden el almacén de datos. El primer nivel contiene datos del legado.
-y otros sistemas de procesamiento de transacciones. Este nivel es compatible con la operación diaria de
-la organización; en otras palabras, el primer nivel admite todo el procesamiento de transacciones. De
-En los sistemas operativos, los datos son ampliamente manipulados y luego trasladados a los datos atómicos.
-almacén. (Inmon 2005)
-
-\textbf{}
-\textbf{El Enfoque de Inmon}\\
-
-El enfoque de Inmon para construir un almacén de datos comienza con el modelo de datos corporativos. Este modelo identifica las áreas temáticas clave y, lo que es más importante, las entidades clave con las que opera y se preocupa la empresa, como el cliente, el producto, el proveedor, etc. A partir de este modelo, se crea un modelo lógico detallado para cada entidad principal. Por ejemplo, se creará un modelo lógico para el Cliente con todos los detalles relacionados con esa entidad. Podría haber diez entidades diferentes bajo Cliente. Todos los detalles, incluidas las claves comerciales, los atributos, las dependencias, la participación y las relaciones, se capturarán en el modelo lógico detallado. El punto clave aquí es que la estructura de la entidad está construida en forma normalizada. La redundancia de datos se evita tanto como sea posible. Esto conduce a una identificación clara de los conceptos comerciales y evita anomalías en la actualización de datos. El siguiente paso es construir el modelo físico. La implementación física del almacén de datos también está normalizada. Esto es lo que Inmon llama como un 'almacén de datos', y aquí es donde se gestiona la versión única de la verdad para la empresa. Este modelo normalizado hace que cargar los datos sea menos complejo, pero usar esta estructura para realizar consultas es difícil ya que involucra muchas tablas y uniones. Entonces, Inmon sugiere construir data marts específicos para los departamentos. Los mercados de datos se diseñarán específicamente para Finanzas, Ventas, etc., y los mercados de datos pueden tener datos desnormalizados para ayudar con los informes (Breslin, 2004). Todos los datos que ingresan al almacén de datos están integrados, y el almacén de datos es la única fuente de datos para los diferentes mercados de datos. Esto garantiza que la integridad y la consistencia de los datos se mantengan intactos en toda la organización.
+\includegraphics[width=7.5cm]{Imagenes/modelo2}
 
 \textbf{}\\
-\textbf{Las ventajas clave del enfoque de Inmon son:}
+Como podemos observar en la imagen 1 la tabla de hechos es TH-Ventas y está rodeada de las dimensiones TD-Almacén, TD-Producto y TD-Cliente, almacenando el ID de cada dimensión en la tabla de Hechos para, así, poder relacionar los atributos descriptivos de cada dimensión con la fila de la tabla de hechos.\textbf{}\\
+
+El modelo estrella separa los datos del proceso de negocio en: hechos y dimensiones. Los hechos contienen datos medibles, cuantitativos, y las dimensiones los atributos que describen los datos indicados en los hechos.\textbf{}\\
+\textbf{}\\
+\textbf{Tabla de hechos}\\
+- Clave principal compuesta por los claves principales de las tablas de dimensiones\\
+\textbf{}\\
+- Registra medidas o métricas de un evento específico. Ejemplo: cliente compra un geranio de maceta de 25cm en floristería mineral vegetal Lola a las 12:3 0am del 10 de Octubre de 2027\\
+\textbf{}\\
+- Evita repetir de manera completa los atributos dimensionales. En la TH sólo irá un ID de la dimensión\\
+\textbf{}\\
+- Se diseñan según el nivel de granularidad deseado, pudiendo registrar eventos a un gran nivel de atomicidad\\
+
+\textbf{Tabla de dimensiones}\\
+Tienen una clave primaria simple.\textbf{}\\
+
+- Generalmente tienen un número bajo de registros\textbf{}\\
+- Cada registro puede contener un gran número de atributos\textbf{}\\
+- Suelen contener una surrogate primary key, generalmente una columna de tipo entero\textbf{}\\
+\textbf{}\\
+Las principales ventajas del esquema de estrella son:\textbf{}\\
+- Queries simples. Las uniones y cruces son más sencillos, debido a su lógica, que los de un esquema normalizado\textbf{}\\
+- Lógica de reporting simplificada\textbf{}\\
+- Mejoras en el rendimiento de las consultas\textbf{}\\
+- Agregaciones más rápidas. Gracias a las queries simplificadas\textbf{}\\
+\textbf{}\\
+Las principales desventajas del esquema de estrella son:\textbf{}\\
+- Poco flexible. Los esquemas en estrella son construidos para una vista de los datos en particular
+
+
+\textbf{Esquema en copo de nieve}\\
+Un esquema de copo de nieve es una estructura más compleja que el esquema de estrella. Se da cuando alguna de las dimensiones se implementa con más de una tabla de datos.
+El objetivo es normalizar estas tablas y reducir el espacio de almacenamiento al eliminar la redundancia.
+Se representa como una tabla de hechos conectada con dimensiones anidadas. Al normalizar por completo las dimensiones el resultado parece un copo de nieve.\\
+\includegraphics[width=7.5cm]{Imagenes/modelo3}
+\textbf{}\\
+Observamos en la imagen 2 como se dividen las dimensiones de TD-Almacén, TD-Producto y TD-Cliente en sub-dimensiones normalizadas.\textbf{}\\
+\textbf{}\\
+Las principales ventajas del esquema de copo de nieve son:\textbf{}\\
+
+- Algunas herramientas de modelado de bases de datos multidimensional OLAP se optimizan\textbf{}\\
+- La normalización de los atributos reduce el almacenamiento de datos\textbf{}\\
+\textbf{}\\
 \textbf{}\\
 
-- El almacén de datos realmente sirve como la única fuente de verdad para la empresa, ya que es la única fuente para los mercados de datos y todos los datos en el almacén de datos están integrados.\textbf{}\\
-- Se evitan las anomalías en la actualización de datos debido a la baja redundancia. Esto hace que el proceso ETL sea más fácil y menos propenso a fallas.\textbf{}\\
-- Los procesos comerciales se pueden entender fácilmente, ya que el modelo lógico representa las entidades comerciales detalladas.\textbf{}\\
-- Muy flexible: a medida que cambian los requisitos comerciales o cambian los datos de origen, es fácil actualizar el almacén de datos, ya que una cosa está en un solo lugar.\textbf{}\\
-- Puede manejar diversas necesidades de informes en toda la empresa.\textbf{}\\
 \textbf{}\\
-\textbf{Estas son algunas de las desventajas del método Inmon:}
 \textbf{}\\
-
-- El modelo y la implementación pueden volverse complejos con el tiempo, ya que implica más tablas y combinaciones.\textbf{}\\
-- Necesita recursos expertos en modelado de datos y en el negocio mismo. Este tipo de recursos puede ser difícil de encontrar y a menudo son caros.\textbf{}\\
-- La configuración inicial y la entrega tomarán más tiempo, y la gerencia debe ser consciente de esto.\textbf{}\\
-- Se necesita más trabajo ETL ya que los data marts se crean desde el almacén de datos.\textbf{}\\
-- Se necesita un equipo bastante grande de especialistas para administrar con éxito el medio ambiente (Breslin, 2004).\textbf{}\\
+\textbf{}\\
+Las principales desventajas del esquema de copo de nieve son:\textbf{}\\
+- Queries complejas debido a la normalización (implica un mayor número de cruces)\textbf{}\\
+- Bajo rendimiento debido a la normalización\textbf{}\\
+\textbf{}\\
+Después de haber descrito los esquemas de estrella y copo de nieve vamos a dejar una tabla con la comparativa entre los dos esquemas:
 
 \textbf{}\\
-\item \textbf{Metodologia Kimboll}: se utiliza para la construcción de un almacén de datos (data warehouse, DW) es decir, una colección de datos situada en un determinado lugar, (empresa, organización, etc.), integrado y variable en el tiempo, ayudando a la toma de decisiones. (Inestroza, 2018) \\
+\textbf{Beneficios del modelado dimensional}
+\textbf{}\\
+El modelado dimensional sigue siendo la técnica de modelado de datos más utilizada para diseñar almacenes de datos empresariales debido a los beneficios que produce. Éstos incluyen:
+\textbf{}\\
+\textbf{}\\
+\textbf{Recuperación más rápida de datos}\\
+El modelado dimensional combina las tablas en el propio modelo, lo que permite a los usuarios recuperar datos más rápido al ejecutar consultas de unión en comparación con los otros enfoques. El esquema desnormalizado de un modelo dimensional está optimizado para ejecutar consultas ad hoc. Como resultado, complementa en gran medida los objetivos de inteligencia empresarial (BI) de una organización.
+\textbf{}\\
+\textbf{}\\
+\textbf{Mejor comprensión de los procesos de negocio}\\
+La información en un modelo dimensional se almacena en tablas de hechos y dimensiones. Cubriremos qué hechos y dimensiones se encuentran en las secciones subsiguientes. Esta categorización de los datos en hechos y dimensiones, y la estructura entidad-relación de un modelo dimensional, presentan procesos de negocios complejos de una manera fácil de entender para los analistas.\textbf{}\\
+\textbf{}\\
+\textbf{}\\
+
+\textbf{Flexible para cambiar}\\
+El marco de modelado dimensional hace que el diseño del almacén de datos sea extensible. El diseño se puede modificar fácilmente para incorporar nuevos requisitos comerciales o realizar ajustes. Se pueden agregar nuevas entidades en el modelo o se puede cambiar el diseño de las existentes para reflejar los procesos comerciales modificados.
+\textbf{}\\
+\textbf{}\\
+\textbf{Apartir de aqui es tu parte marko xd}\\
+\item \textbf{ Modelo Tabular}: se utiliza para la construcción de un almacén de datos (data warehouse, DW) es decir, una colección de datos situada en un determinado lugar, (empresa, organización, etc.), integrado y variable en el tiempo, ayudando a la toma de decisiones. (Inestroza, 2018) \\
 
 \textbf{Enfoque Kimball}
 \\ \\
