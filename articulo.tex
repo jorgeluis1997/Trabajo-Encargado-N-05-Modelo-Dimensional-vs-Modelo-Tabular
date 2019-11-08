@@ -117,9 +117,9 @@ Por otro lado tienen limitaciones,como que es no se permite más de una relació
 \begin{itemize}
 \item 
 
-\textbf{Modelo Dimensional vs Modelo Tabular}
+\textbf{Establecer la diferencia entre Modelo dimensional y Modelo tabular}
 \\
-\item Comprender las los modelos de forma dimensional y tabularl
+\item Explicar y comprender los modelos de forma dimensional y tabular
 
 
 
@@ -230,75 +230,51 @@ La información en un modelo dimensional se almacena en tablas de hechos y dimen
 El marco de modelado dimensional hace que el diseño del almacén de datos sea extensible. El diseño se puede modificar fácilmente para incorporar nuevos requisitos comerciales o realizar ajustes. Se pueden agregar nuevas entidades en el modelo o se puede cambiar el diseño de las existentes para reflejar los procesos comerciales modificados.
 \textbf{}\\
 \textbf{}\\
-\textbf{Apartir de aqui es tu parte marko xd}\\
-\item \textbf{ Modelo Tabular}: se utiliza para la construcción de un almacén de datos (data warehouse, DW) es decir, una colección de datos situada en un determinado lugar, (empresa, organización, etc.), integrado y variable en el tiempo, ayudando a la toma de decisiones. (Inestroza, 2018) \\
 
-\textbf{Enfoque Kimball}
+
+
+\item \textbf{ Modelo Tabular}:Los modelos tabulares de SQL (Server Analysis Services) son bases de datos que se ejecuta en memoria o en modo DirectQuery.  Es gracias al uso de algoritmos y un procesador de consultas de subprocesos múltiples que el motor de análisis Vertipaq de SQL que se accede rápidamente a objetos y datos de clientes como Power BI y Excel. \\ \\
+Los predeterminados son los modelos en memoria, pero DirectQuery es un modo de consulta alternativo para modelos muy grandes que no caben en la memoria o cuando la volatilidad de los datos impide un procesamiento razonable. \\ \\
+Los modelos tabulares se crean en Visual Studio con proyectos de SQL.  La plantilla del proyecto provee una superficie de diseño para crear objetos de modelos semánticos, como tablas, particiones, relaciones, jerarquías, medidas y KPI,  además, se implementan con Azure, pudiendo ser administrados en SQL Server Management Studio.\\ \\
+
+
+
+\textbf{Tipos de modelo tabular}
 \\ \\
-Contiene varios principios básicos que se analizan detenidamente en el libro de herramientas de Data Warehouse Lifecycle, Second Edition (Kimball, Ross, Mundy, y Becker, 2008)
+Un modelo tabular está compuesto por tablas y sus relaciones.  Los modelos pueden ser de distinto tipo (Amby, 2018):
 \begin{itemize}
-\item Seguir una metodología comprobada como el  ciclo de vida Kimball.
-\item Comprender los requisitos comerciales para priorizar esfuerzos y generar valor comercial. 
-\item Diseñar los conjuntos de datos con las características de usabilidad, flexibilidad y rendimiento.
-\item Crear y entregar con rapidez los incrementos de los datos basados en procesos comerciales, conocidos con el nombre de almacenamiento de datos. 
-\item Diseñar y construir una arquitectura de sistema DW/BI basado en lo que el negocio necesite, según su volumen de datos y entorno de sistemas de TI. 
-\item Desarrollar el sistema de extracción, transformación y carga (ETL) con componentes estándar que se encuentran en el entorno de datos analíticos para tratar los patrones de diseño comunes.
-\item Brindar la información total, tales como: informes, herramientas de consulta, aplicaciones, portales, documentación, capacitación y soporte.
+\item \textbf{Única tabla} Clásico de Excel, especialmente antes de MS Office Excel 2013.  No se recomienda en lo absoluto, afecta bastante al rendimiento a partir del millón de filas.\\
+\item \textbf{Copo de nieve} Modelo Normalizado.  Existen enlaces entre las tablas de búsqueda o dimensiones que no apuntan directamente a la tabla de hechos.\\ \\
+\includegraphics[width=6cm]{Imagenes/imagen1}\\
+\item \textbf{Modelo Estrella} Modelo denormalizado.  Todas las tablas de búsqueda o dimensiones apuntan directamente a la tabla de hechos.  Este modelo es óptimo.\\ \\
+\includegraphics[width=6cm]{Imagenes/imagen2}\\
 \end{itemize}
 
-
-
-\textbf{Business dimensional lifecycle}
+\textbf{Nivel de compatibilidad para modelos tabulares}
 \\ \\
-La metodología se basa en lo que Kimball denomina, traducida al español “Ciclo de Vida Dimensional del Negocio”. Basado en cuatro principios básicos:
+\textit{"El nivel de compatibilidad se refiere a comportamientos específicos de la versión en el motor de Analysis Services.  Así, por ejemplo, DirectQuery y los metadatos de objetos tabulares tienen implementaciones diferentes según el nivel de compatibilidad.  En general, debe elegir el último de estos niveles, para que sea compatible con sus servidores "} (Microsoft, 2019). \\ \\
+El último nivel de compatibilidad admitido es 1500, entre sus características principales se encuentra:  
 
 \begin{itemize}
-\item Centrarse en el negocio.
-\item Construir una infraestructura de información adecuada.
-\item Realizar entregas en incrementos significativos (este principio consiste en crear el almacén de datos (DW) en incrementos entregables en plazos de 6 a 12 meses, en este punto, la metodología se parece a las metodologías ágiles de construcción de software).
-\item Ofrecer la solución completa (En este se punto proporcionan todos los elementos necesarios para entregar valor a los usuarios de negocios, para esto ya se debe tener un almacén de datos bien diseñado, se deberán entregar herramientas de consulta ad hoc, aplicaciones para informes y análisis avanzado, capacitación, soporte, sitio web y documentación).
+\item \textbf{Grupo de cálculo} Estos grupos de cálculo se pueden reducir significativamente el número de medidas redundantes al agrupar expresiones de medida comunes como elementos de cálculo.  Los grupos de cálculo son compatibles con modelos tabulares en el nivel de compatibilidad 1500 y superior. \\  Los grupos de cálculo abordan un problema en modelos complejos donde puede haber una proliferación de medias redundantes utilizando los mismos cálculos, lo más común con los cálculos de inteligencia de tiempo.  Los grupos de cálculo se muestran en los informes como una tabla con una sola columna.  La columna representa uno o más cálculos reutilizables.
+\item \textbf{Relaciones de muchos a muchos} Esta mejora permite relaciones de muchos a muchos entre tablas donde ambas columnas no son únicas.  Las relaciones de muchos a muchos necesitan que los modelos estén en el nivel de compatibilidad 1500 o superior.\\ Se puede crear relaciones de muchos a muchos utilizando Visual Studio 2019 con los proyectos de Analysis Services VSIX 2.9.2 y superior, la API del Modelo de objetos tabulares (TOM), el Lenguaje de secuencia de comandos del modelo tabular (TMSL) y el Editor de tablas de código abierto herramienta.
+\item \textbf{Niveles de compatibilidad admitidos por versión} \\ \\
+\includegraphics[width=6cm]{Imagenes/imagen3}\\
+\item \textbf{Establecer nivel de compatibilidad} Al crear un proyecto de modelo tabular en Visual Studio, puede especificar el nivel de compatibilidad en el cuadro de dialogo “Tabular model designer” \\ \\
+\includegraphics[width=6cm]{Imagenes/imagen4}\\
+Si se selecciona la opción “No volver a mostrar este mensaje”, todos los proyectos posteriores usarán el nivel de compatibilidad que especificó como predeterminado.  Se puede cambiar el nivel de compatibilidad predeterminado en SSDT en Herramientas- Opciones \\ \\
+Para actualizar un proyecto de modelo tabular en SSDT, se configura la propiedad “Nivel de compatibilidad” en la ventana “Propiedades”.  Este proceso de actualización es irreversible.\\ \\
+En SSMS, cuando se conecta a un servidor de SQL Server Analysis Services, un servidor de Azure Anaysis Services o un espacio de trabajo de Power BI Premiun, la propiedad Nivel de compatibilidad admitido será de 1200.  Este problema se resolvería en una próxima actualización mostrando el nivel de compatibilidad más alto compatible.\\ 
+\item \textbf{Verificar el nivel de compatibilidad para una base de datos tabular en SSMS} En SSMS se hace clic en el nombre de la base de datos – Propiedades – Nivel de compatibilidad. \\ 
+\item \textbf{Verificar el nivel de compatibilidad compatible para un servidor en SSMS} En SSMS se hace clic en el nombre del servidor – Propiedades – Nivel de compatibilidad admitido.  Esta propiedad especifica el nivel de compatibilidad más alto de una base de datos que se ejecutará en el servidor.  El nivel de compatibilidad admitido es de solo lectura no se puede cambiar. \\ \\
 
 \end{itemize}
-La construcción de una solución de DW/BI (Datawarehouse/Business Intelligence) es sumamente compleja, y Kimball plantea una metodología que simplifica esa complejidad. \\ \\
-El enfoque del ciclo de vida Kimball se ilustra en el siguiente diagrama. Facilita una hoja de ruta general que constituye la serie de tareas de alto nivel solicitadas para proyectos exitosos de DW / BI.
 
 
-\includegraphics[width=7.5cm]{Imagenes/Kimboll2}
-
-\textit{"Independientemente de los objetivos específicos de DW / BI de su organización, creemos que un objetivo global del equipo debería ser la aceptación comercial de los entregables de DW / BI para respaldar la toma de decisiones de la empresa. Este objetivo debe permanecer a la vanguardia en todo el diseño, desarrollo e implementación de su sistema DW / BI "} (Arias, 2018)
-\\ \\
 
 
-\textbf{Definicion de requerimientos}
 
-Entre las tareas para definir los requerimientos, existe una flecha bidireccional, esta indica que los requerimientos del negocio son el soporte inicial y también tiene influencia en el plan del proyecto.\\
 
-Si nos fijamos en el centro del diagrama, vemos las tareas asociadas al área de “Datos”, en esta, se diseña e implementa el modelo dimensional, se desarrolla el sub-sistema de extracción, transformación, carga (extract, transformation, and Load-ETL) \\
-
-Las tareas pertenecientes a esta área son:
-
-\begin{itemize}
-\item [1.] Modelado Dimensional
-\begin{itemize}
-\item [1.1.] Elección del proceso de negocio
-\item [1.2.] Establecer el nivel de granularidad
-\item [1.3.] Elegir las dimensiones
-\item [1.4.] Identificar medidas y las tablas de hechos
-\end{itemize}
-\item [2.] Diseño Físico
-\item [3.] Diseño e Implementación del subsistema de Extracción, Transformación y Carga (ETL)
-\item [4.] Implementación
-\item [5.] Mantenimiento y Crecimiento del Data Warehouse
-\textbf{}\\
-\textbf{}\\
-\item \textbf{Inmon vs Kimball}: \\
-
-Si recordamos lo expuesto en entradas anteriores, el datawarehouse de Kimball está orientado a la consulta de la información, por lo que su estructura interna está especialmente diseñada para garantizar una explotación de los datos rápida y sencilla, no requiriendo usuarios especializados para ello. Por el contrario, el datawarehouse de Inmon persigue la integración de todos los datos de la compañía, estando orientado hacia el almacenaje de grandes volúmenes de datos, por lo que su estructura interna normalizada se diseña para evitar la redundancia de datos, simplificar las labores de mantenimiento, etc. cuestiones que complican las consultas de la información, requiriendo que los usuarios finales estén mucho más especializados. \\
-Así, podríamos decir que el enfoque de Kimball se ajusta más a proyectos pequeños en los que se persiga un sistema fácilmente explotable y entendible por el usuario y de rápido desarrollo, siendo el modelo de Inmon más apropiado para sistemas complejos de mayor envergadura. \\
-Todo proyecto tiene sus propias peculiaridades, siendo cada caso único e independiente, por lo que resulta necesario llevar a cabo un estudio de todas ellas antes de decantarnos por una solución u otra, de forma que podamos hacernos una idea sobre qué modelo se ajusta mejor a las condiciones de nuestro proyecto. \\
-Aun así, tampoco debemos cerrarnos a estas dos opciones, ya que existen casos en los que se han implantado soluciones intermedias entre ambas visiones, logrando así sistemas híbridos que permiten conjugar con éxito las ventajas de ambas perspectivas. \\
-
-\end{itemize}
 
 
 	
@@ -341,26 +317,17 @@ Se ha demostrado que tanto el enfoque de Inmon como el de Kimball funcionan para
 \begin{thebibliography}{99} 
 
 \bibitem[1]{}
-\newblock Arias, D. (4 de marzo de 2018). Todo Sobre La Metodologia Kimball. Obtenido de postparaprogramadores: https://postparaprogramadores.com/metodologia-kimball
+\newblock Amby. (13 de febrero de 2018). DAX: Introducción a las relaciones del Modelo Tabular. Obtenido de Amby.net: https://amby.net/2018/02/13/dax-introduccion-a-las-relaciones-del-modelo-tabular/
 
 \bibitem[2]{}
-\newblock Inestroza, M. (18 de Junio de 2018). METODOLOGÍA KIMBALL. Obtenido de goconsultores.com: http://www.goconsultores.com/tag/metodologia-kimball/
+\newblock Microsoft. (9 de setiembre de 2019). Calculation groups. Obtenido de Microsoft Docs: https://docs.microsoft.com/en-us/analysis-services/tabular-models/calculation-groups
 
 \bibitem[3]{}
-\newblock Kimball, R., Ross, M., Mundy, J., \& Becker, B. (2008). The Data Warehouse Lifecycle Toolkit, 2nd Edition. Wiley.
+\newblock Microsoft. (21 de octubre de 2019). What's New in SQL Server Analysis Services. Obtenido de Microsoft Docs: https://docs.microsoft.com/en-us/analysis-services/what-s-new-in-sql-server-analysis-services\#many-to-many-relationships-in-tabular-models
 
 \bibitem[4]{}
-\newblock Inmon, WH  Construyendo el Data Warehouse, cuarta edición . John Wiley \& Sons., 2005.
-\bibitem[5]{}
-\newblock Marakas, George M.  Almacenamiento moderno de datos, minería y visualización . Prentice Hall, 2003.
-\bibitem[6]{}
-\newblock Kimball, Ralph y Margy Ross. The Data Warehouse Toolkit: The Definitive Guide to Dimensional Modeling, Third Edition . John Wiley \& Sons. 2013. Libros 24x7.
-\bibitem[7]{}
-\newblock Zentut 2016. "Arquitectura del almacén de datos Ralph Kimball" Zentut . com . Consultado el 25 de mayo de 2016. 
-\bibitem[8]{}
-\newblock Inmon, WH 2010. “UNA CUENTA DE DOS ARQUITECTURAS”
-\bibitem[9]{}
-\newblock Stanford 2003. "Conceptos de almacenamiento de datos" Stanford.edu. Consultado el 26 de mayo de 2016.
+\newblock Microsoft. (5 de junio de 2018). Connect to a tabular model database. Obtenido de Microsoft Docs: https://docs.microsoft.com/en-us/analysis-services/tabular-models/connect-to-a-tabular-model-database-ssas
+
 
 \end{thebibliography}
 
